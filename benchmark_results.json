@@ -1,0 +1,272 @@
+[
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Pandas",
+    "dataset": "titanic",
+    "time_seconds": 0.004027843475341797,
+    "memory_mb": 1.140625,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Polars",
+    "dataset": "titanic",
+    "time_seconds": 0.00463104248046875,
+    "memory_mb": 5.265625,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Pandas",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "'amount'"
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Polars",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "unable to find column \"amount\"; valid columns: [\"PassengerId\", \"Survived\", \"Pclass\", \"Name\", \"Sex\", \"Age\", \"SibSp\", \"Parch\", \"Ticket\", \"Fare\", \"Cabin\", \"Embarked\"]"
+  },
+  {
+    "operation": "Group By",
+    "library": "Pandas",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "'country'"
+  },
+  {
+    "operation": "Group By",
+    "library": "Polars",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "country\n\nResolved plan until failure:\n\n\t---> FAILED HERE RESOLVING 'sink' <---\nDF [\"PassengerId\", \"Survived\", \"Pclass\", \"Name\", ...]; PROJECT */12 COLUMNS"
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Pandas",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "'timestamp'"
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Polars",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "timestamp"
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Pandas",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "'merchant'"
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Polars",
+    "dataset": "titanic",
+    "time_seconds": 0,
+    "memory_mb": 0,
+    "success": false,
+    "error": "merchant"
+  },
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Pandas",
+    "dataset": "data_1mb",
+    "time_seconds": 0.011677265167236328,
+    "memory_mb": 6.28125,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Polars",
+    "dataset": "data_1mb",
+    "time_seconds": 0.0018470287322998047,
+    "memory_mb": 5.6875,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Pandas",
+    "dataset": "data_1mb",
+    "time_seconds": 0.002763986587524414,
+    "memory_mb": 0.21875,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Polars",
+    "dataset": "data_1mb",
+    "time_seconds": 0.002450227737426758,
+    "memory_mb": 4.03125,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Group By",
+    "library": "Pandas",
+    "dataset": "data_1mb",
+    "time_seconds": 0.003307819366455078,
+    "memory_mb": 0.78125,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Group By",
+    "library": "Polars",
+    "dataset": "data_1mb",
+    "time_seconds": 0.002201080322265625,
+    "memory_mb": 2.9375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Pandas",
+    "dataset": "data_1mb",
+    "time_seconds": 0.010604619979858398,
+    "memory_mb": 0.859375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Polars",
+    "dataset": "data_1mb",
+    "time_seconds": 0.0022749900817871094,
+    "memory_mb": 1.984375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Pandas",
+    "dataset": "data_1mb",
+    "time_seconds": 0.0030829906463623047,
+    "memory_mb": 0.03125,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Polars",
+    "dataset": "data_1mb",
+    "time_seconds": 0.004388093948364258,
+    "memory_mb": 0.84375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Pandas",
+    "dataset": "data_1gb",
+    "time_seconds": 9.654226779937744,
+    "memory_mb": 3162.09375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Wczytywanie CSV",
+    "library": "Polars",
+    "dataset": "data_1gb",
+    "time_seconds": 0.5605120658874512,
+    "memory_mb": 1413.25,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Pandas",
+    "dataset": "data_1gb",
+    "time_seconds": 0.5609400272369385,
+    "memory_mb": 439.671875,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Filtrowanie",
+    "library": "Polars",
+    "dataset": "data_1gb",
+    "time_seconds": 0.39154815673828125,
+    "memory_mb": 189.234375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Group By",
+    "library": "Pandas",
+    "dataset": "data_1gb",
+    "time_seconds": 0.43895721435546875,
+    "memory_mb": 37.15625,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Group By",
+    "library": "Polars",
+    "dataset": "data_1gb",
+    "time_seconds": 0.5662310123443604,
+    "memory_mb": -1130.796875,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Pandas",
+    "dataset": "data_1gb",
+    "time_seconds": 41.02012276649475,
+    "memory_mb": 73.453125,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Sortowanie",
+    "library": "Polars",
+    "dataset": "data_1gb",
+    "time_seconds": 2.63570499420166,
+    "memory_mb": 171.234375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Pandas",
+    "dataset": "data_1gb",
+    "time_seconds": 2.8429529666900635,
+    "memory_mb": 159.234375,
+    "success": true,
+    "error": null
+  },
+  {
+    "operation": "Operacje tekstowe",
+    "library": "Polars",
+    "dataset": "data_1gb",
+    "time_seconds": 0.08506417274475098,
+    "memory_mb": 152.84375,
+    "success": true,
+    "error": null
+  }
+]

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jak radzić sobie z większymi danymi</title>
+    
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css">
+    
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="node_modules/reveal.js/plugin/highlight/monokai.css">
+    
+    <style>
+        .reveal .slides section {
+            text-align: left;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-align: center;
+        }
+        .reveal .slides {
+            width: 90% !important;
+            max-width: 1200px !important;
+        }
+        .reveal pre {
+            font-size: 0.45em;
+            line-height: 1.1em;
+            margin: 0.5em 0;
+        }
+        .reveal .code-wrapper {
+            position: relative;
+        }
+        .reveal .comparison-table {
+            font-size: 0.8em;
+        }
+        .reveal .comparison-table th {
+            background-color: #2a2a2a;
+        }
+        .reveal .highlight-green {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .reveal .highlight-red {
+            color: #f44336;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title slide -->
+            <section>
+                <h1>Jak radzić sobie <br>z większymi danymi?</h1>
+            </section>
+
+
+
+
+            <!-- Agenda -->
+            <section>
+                <h2>Agenda</h2>
+                <ul>
+                    <li>Wprowadzenie do Pandas i Polars</li>
+                    <li>Porównanie składni i operacji</li>
+                    <li>Wydajność</li>
+                    <li>Kiedy używać którego narzędzia?</li>
+                </ul>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Kim jestem?</h2>
+                </section>
+                <section>
+                    <h3>Jan Słowik</h3>
+                </section>
+                <section>
+                    <h2>nie kupiłem kursu od Adama</h2>
+                </section>
+              <section>
+                    <h3>ale coś tam wiem</h3>
+                </section>
+                <section>
+                    <h3>imprv.ai</h3>
+                </section>
+            </section>
+
+            <!-- Introduction -->
+            <section>
+                <section>
+                    <h2>Co to jest Pandas?</h2>
+                    <ul>
+                        <li>Biblioteka Pythona do manipulacji i analizy danych</li>
+                        <li>Zbudowana na NumPy</li>
+                        <li>Standard przemysłowy od 2008 roku</li>
+                        <li>Bogaty ekosystem i społeczność</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Jestescie po kursie więc to wiecie*</h2>
+                    <p class="fragment">* ale w metodologii imprv wazne są powtórki ;-)</p>
+                </section>
+
+                <section>
+                    <h2>A czym jest Polars?</h2>
+                    <ul>
+                        <li>Szybka biblioteka DataFrame napisana w Rust</li>
+                        <li>API podobne do Pandas</li>
+                        <!-- <li>Domyślnie leniwej ewaluacji (lazy evaluation)</li> -->
+                        <!-- <li>Operacje wielowątkowe</li> -->
+                        <!-- <li>Format kolumnowy Apache Arrow</li> -->
+                        <!-- <li>Efektywne zarządzanie pamięcią</li> -->
+                    </ul>
+                    <p class="fragment"><small>🦀 RUST to taki język programowania jak python, ale troche inny</small></p>
+                </section>
+            </section>
+
+            <!-- Performance Comparison -->
+             <section>
+                <h3>a jak to wygląda w praktyce?</h3>
+             </section>
+
+            <section>
+                <section>
+                    <p>Porównajmy typowe operacje:</p>
+                    <ul>
+                        <li>Wczytywanie danych</li>
+                        <li>Filtrowanie</li>
+                        <li>Grupowanie i agregacja</li>
+                        <li>Łączenie tabel (joins)</li>
+                        <li>Operacje na tekście</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Wczytywanie plików CSV</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Pandas</h4>
+                            <pre><code class="python">
+import pandas as pd
+
+df = pd.read_csv("./data/titanic.csv")
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars</h4>
+                            <pre><code class="python">
+import polars as pl
+
+df = pl.read_csv("./data/titanic.csv")
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Filtrowanie danych</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Pandas</h4>
+                            <pre><code class="python">
+# Filtrowanie
+df[
+    (df['Sex'] == 'female') & 
+    (df['Pclass'] == 1) & 
+    (df['Survived'] == 1)
+]
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars</h4>
+                            <pre><code class="python">
+# Filtrowanie
+df.filter(
+    (pl.col('Sex') == 'female') & 
+    (pl.col('Pclass') == 1) & 
+    (pl.col('Survived') == 1)
+)
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Operacje Group By</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Pandas</h4>
+                            <pre><code class="python">
+result = df.groupby('category').agg({
+    'sales': 'sum',
+    'quantity': 'mean',
+    'price': 'max'
+})
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars</h4>
+                            <pre><code class="python">
+result = df.group_by('category').agg([
+    pl.col('sales').sum(),
+    pl.col('quantity').mean(),
+    pl.col('price').max()
+])
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Łączenie tabel (joins)</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Pandas</h4>
+                            <pre><code class="python">
+    ports = pd.DataFrame({
+        'Embarked': ['C', 'Q', 'S'],
+        'Port_Name': [
+            'Cherbourg',
+            'Queenstown',
+            'Southampton'
+        ]
+    })
+    
+    df_merged = df.merge(
+        ports,
+        on='Embarked',
+        how='left'
+    )
+    
+    df_merged['Port_Name'].value_counts()
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars</h4>
+                            <pre><code class="python">
+    ports = pl.DataFrame({
+        'Embarked': ['C', 'Q', 'S'],
+        'Port_Name': [
+        'Cherbourg',
+        'Queenstown',
+        'Southampton'
+    ]
+    })
+    
+    df_merged = df.join(
+        ports,
+        on='Embarked',
+        how='left'
+    )
+    
+    df_merged['Port_Name'].value_counts()
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Leniwa vs Natychmiastowa ewaluacja</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Pandas (Natychmiastowa)</h4>
+                            <pre><code class="python">
+    # Każda operacja wykonuje się od razu
+    df_filtered = df[df['age'] > 25]
+    df_grouped = df_filtered.groupby('dept')
+    result = df_grouped.mean()
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars (Leniwa)</h4>
+                            <pre><code class="python">
+    # Budowanie planu zapytania
+    query = (
+        df
+        .lazy()
+        .filter(pl.col('age') > 25)
+        .group_by('dept')
+        .mean()
+    )
+    # Wykonanie zoptymalizowanego planu
+    result = query.collect()
+                            </code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Wydajność</h2>
+                </section>
+                
+                <section>
+                    <h2>Typowe operacje</h2>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Operacja</th>
+                                <th>1MB dataset</th>
+                                <th>1GB dataset</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Sortowanie</strong></td>
+                                <td>Polars 4.7x szybszy</td>
+                                <td class="highlight-green">Polars 15.6x szybszy</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Operacje tekstowe</strong></td>
+                                <td>Pandas 1.4x szybszy</td>
+                                <td class="highlight-green">Polars 33.4x szybszy</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Wczytywanie</strong></td>
+                                <td>Polars 6.3x szybszy</td>
+                                <td class="highlight-green">Polars 17.2x szybszy</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="fragment"><small>💡 Im większe dane, tym większa przewaga Polars!</small></p>
+                </section>
+
+                <section>
+                    <h2>Wczytywanie CSV</h2>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Rozmiar pliku</th>
+                                <th>Pandas</th>
+                                <th>Polars</th>
+                                <th>Wynik</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>60 KB (Titanic)</td>
+                                <td class="highlight-green">4.0ms</td>
+                                <td>4.6ms</td>
+                                <td>Pandas 1.1x</td>
+                            </tr>
+                            <tr>
+                                <td>1.2 MB</td>
+                                <td>11.7ms</td>
+                                <td class="highlight-green">1.8ms</td>
+                                <td class="highlight-green">Polars 6.3x</td>
+                            </tr>
+                            <tr>
+                                <td>1.1 GB</td>
+                                <td>9.65s</td>
+                                <td class="highlight-green">0.56s</td>
+                                <td class="highlight-green">Polars 17.2x</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+
+
+                <section>
+                    <h2>Joins - łączenie tabel</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Left join: 2M × 500K rekordów</h4>
+                            <pre><code class="python">
+# Łączenie dużych tabel
+result = df_left.join(
+    df_right, 
+    on='key', 
+    how='left'
+)
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Biblioteka</th>
+                                        <th>Czas</th>
+                                        <th>Pamięć</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Pandas</td>
+                                        <td>28.5s</td>
+                                        <td>4.2 GB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Polars</td>
+                                        <td class="highlight-green">4.1s</td>
+                                        <td class="highlight-green">2.1 GB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Lazy Evaluation<br>Magia optymalizacji</h2>
+                    <div style="display: flex; justify-content: space-between;">
+
+                        <div style="width: 48%;">
+                            <h4>Pandas (Eager)</h4>
+                            <pre><code class="python">
+df = pd.read_csv("huge_file.csv")
+filtered = df[df['date'] > '2023-01-01']
+grouped = filtered.groupby('category')
+result = (grouped['sales']
+    .sum()
+    .sort_values(ascending=False)
+    .head(10)
+)
+# Czas: 15.8s
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Polars (Lazy)</h4>
+                            <pre><code class="python">
+result = (
+    pl.scan_csv("huge_file.csv")
+    .filter(pl.col('date') > '2023-01-01')
+    .group_by('category')
+    .agg(pl.col('sales').sum())
+    .sort('sales', descending=True)
+    .head(10)
+    .collect()  # Wykonanie
+)
+# Czas: 3.2s
+                            </code></pre>
+                        </div>
+                    </div>
+                    <p class="fragment"><small>🚀 Polars automatycznie optymalizuje plan zapytania!</small></p>
+                </section>
+
+                                 <section>
+                     <h2>Zużycie pamięci RAM</h2>
+                     <div style="display: flex; justify-content: space-between;">
+                         <div style="width: 48%;">
+                             <h4>Dataset 1.1GB (12.5M rekordów)</h4>
+                             <ul>
+                                 <li>🐼 <strong>Pandas:</strong> 3.16 GB RAM</li>
+                                 <li>🐻‍❄️ <strong>Polars:</strong> <span class="highlight-green">1.41 GB RAM</span></li>
+                                 <li>💾 <strong>Oszczędność:</strong> <span class="highlight-green">55%</span></li>
+                                 <li>📊 <strong>Stosunek:</strong> Pandas = 2.9x rozmiar pliku</li>
+                                 <li>📈 <strong>Stosunek:</strong> Polars = 1.3x rozmiar pliku</li>
+                             </ul>
+                         </div>
+                         <div style="width: 48%;">
+                             <h4>Dlaczego Polars używa mniej?</h4>
+                             <ul>
+                                 <li>Apache Arrow format</li>
+                                 <li>Kolumnowe przechowywanie</li>
+                                 <li>Lepsza kompresja</li>
+                                 <li>Zero-copy operacje</li>
+                                 <li class="highlight-green">Efektywność rośnie z rozmiarem!</li>
+                             </ul>
+                         </div>
+                     </div>
+                 </section>
+
+                <!-- <section>
+                    <h2>Operacje na tekście</h2>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <h4>Zadanie: Regex na 1M stringów</h4>
+                            <pre><code class="python">
+# Wyciągnięcie numeru telefonu
+pattern = r'\d{3}-\d{3}-\d{4}'
+df['phone'] = df['text'].str.extract(pattern)
+                            </code></pre>
+                        </div>
+                        <div style="width: 48%;">
+                            <h4>Wyniki</h4>
+                            <table class="comparison-table">
+                                <tr>
+                                    <td><strong>Pandas</strong></td>
+                                    <td>12.4s</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Polars</strong></td>
+                                    <td class="highlight-green">1.8s</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Przewaga</strong></td>
+                                    <td class="highlight-green">6.9x szybszy</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </section> -->
+
+
+
+          
+
+                                 <!-- <section>
+                     <h2>Kiedy Pandas jest szybszy?</h2>
+                     <ul>
+                         <li>📄 <strong>Małe zbiory danych</strong> (&lt; 100k rekordów)</li>
+                         <li>🔧 <strong>Prototypowanie</strong> - szybkie eksplorowanie danych</li>
+                         <li>🐍 <strong>Ekosystem Python</strong> - integracja z NumPy/SciPy*</li>
+                     </ul>
+                     <br>
+                     <br>
+                     <div style="text-align: center;">
+                         <h4>Test na danych Titanic (891 rekordów)</h4>
+                         <table class="comparison-table" style="margin: 0 auto;">
+                             <tr>
+                                 <td><strong>Operacja</strong></td>
+                                 <td><strong>Pandas</strong></td>
+                                 <td><strong>Polars</strong></td>
+                             </tr>
+                             <tr>
+                                 <td>Wczytywanie CSV</td>
+                                 <td class="highlight-green">4.6ms</td>
+                                 <td>9.0ms</td>
+                             </tr>
+                             <tr>
+                                 <td>Filtrowanie</td>
+                                 <td class="highlight-green">3.5ms</td>
+                                 <td>13.0ms</td>
+                             </tr>
+                         </table>
+                     </div>
+                 </section> -->
+                 <!-- <section>
+                    <p>to_pandas()</p>
+                
+
+                        <pre><code class="python">
+pandas_df = polars_df.to_pandas()
+                        </code></pre>
+                 </section> -->
+
+                 <!-- <section>
+                     <h2>Wielowątkowość</h2>
+                    <ul>
+                        <li>🧵 <strong>Pandas:</strong> Głównie jednowątkowy (NumPy + GIL)</li>
+                        <li>⚡ <strong>Polars:</strong> Natywne wsparcie wielowątkowości</li>
+                        <li>🔥 <strong>Rust:</strong> Brak GIL - prawdziwa równoległość</li>
+                        <li>📊 <strong>Rezultat:</strong> Lepsze wykorzystanie CPU</li>
+                    </ul>
+                </section> -->
+            </section>
+
+            <!-- Use Cases -->
+
+
+            <!-- Conclusion -->
+            <section>
+                <section>
+                    <h2>Wnioski</h2>
+                    
+                    <ul>
+                        <li>📏 <strong>Rozmiar ma znaczenie!</strong>  ~1MB</li>
+                        <li>🚀 <strong>Polars skaluje się lepiej</strong> - przewaga rośnie z rozmiarem danych</li>
+                        <li>💾 <strong>Polars oszczędza pamięć</strong> - 55% mniej RAM na dużych zbiorach</li>
+                        <li>⚡ <strong>Niektóre operacje dramatycznie szybsze</strong> - sortowanie 15x, tekst 33x</li>
+                    </ul>
+
+                </section>
+                </section>
+                <section>
+                <section>
+                    <h2>To czego uzywać?</h2>
+                </section>
+                <section>
+                    <img src="./img/mem_zalezy.jpg" style="height: 70vh; display: block; margin: 0 auto;">
+                </section>
+                <section>
+                    <h2>Kiedy używać Pandas</h2>
+                    <ul>
+                        <li>🔬 <strong>Eksploracyjna analiza danych</strong> - Bogaty ekosystem</li>
+                        <li>📊 <strong>Data Science i ML</strong> - Dobra integracja z scikit-learn</li>
+                        <li>📈 <strong>Wizualizacja</strong> - Płynna współpraca z matplotlib/seaborn</li>
+                        <li>🔄 <strong>Istniejące systemy</strong> - Już używają pandas</li>
+                        <li>📚 <strong>Nauka</strong> - Więcej tutoriali i zasobów</li>
+                        <li>🧪 <strong>Małe do średnie zbiory danych</strong></li>
+                    </ul>
+                </section>
+
+
+
+                <section>
+                    <h2>Kiedy używać Polars</h2>
+                    <ul>
+                        <li>⚡ <strong>Krytyczna wydajność</strong> - Duże zbiory danych</li>
+                        <li>💾 <strong>Ograniczenia pamięci</strong> - Mało RAM</li>
+                        <li>🔄 <strong>Pipeline ETL</strong> - Przepływy transformacji danych</li>
+                        <li>⏱️ <strong>Przetwarzanie w czasie rzeczywistym</strong> - Niskie opóźnienia</li>
+                        <li>🚀 <strong>Nowe projekty</strong> - Zaczynanie od zera</li>
+                        <li>🔧 <strong>Systemy produkcyjne</strong> - Niezawodność i szybkość</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>to_pandas()</p>
+                
+
+                        <pre><code class="python">
+pandas_df = polars_df.to_pandas()
+                        </code></pre>
+                 </section>
+                </section>
+                
+                </section>
+
+
+                <section>
+                    <section>
+                    <h2>Pytania?</h2>
+                </section>
+                <section>
+                    <img src="./img/weare.png" style="max-width: 100%; height: auto;">
+                </section>
+            </section>
+            <section>
+
+                <section>
+                    <h1>Dzięki!</h1>
+                    <div style="display: flex; justify-content: space-between;">
+                    <div style="width: 48%;">
+                                <small>
+                                Zasoby:<br>
+                                • Dokumentacja Polars: <a href="https://pola.rs">pola.rs</a><br>
+                                • Dokumentacja Pandas: <a href="https://pandas.pydata.org">pandas.pydata.org</a>
+                            </small>
+
+                        </div>
+                        <div style="width: 48%;">
+                            <img src="./img/datascience.gif" alt="Data Science GIF" style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+
+                </section>
+            </section>
+            <section>
+
+            </section>
+        </div>
+    </div>
+
+    <script src="node_modules/reveal.js/dist/reveal.js"></script>
+    <script src="node_modules/reveal.js/plugin/notes/notes.js"></script>
+    <script src="node_modules/reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="node_modules/reveal.js/plugin/highlight/highlight.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        });
+    </script>
+</body>
+</html> 

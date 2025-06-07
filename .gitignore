@@ -217,6 +217,12 @@ figures/
 *.swp
 *.swo
 
+# Node.js
+node_modules/
+
 # Poetry
 # Uncomment if you want to ignore the lock file (not recommended for most cases)
 # poetry.lock 
+
+data/data_*.csv
+prezetancja/node_modules
